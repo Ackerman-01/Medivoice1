@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import FileResponse, JSONResponse
+from pydantic import BaseModel
 from paddle_ocr.ocr_utils import process_image_with_ocr
 from tts.tts_utils import text_to_speech
 import os
@@ -48,15 +49,26 @@ async def scan_prescription(image: UploadFile):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-
+class TextRequest(BaseModel):
+    text: str
 @app.post("/hear-medicines/")
-async def hear_medicines(text: str = Form(...)):
+async def hear_medicines(request: TextRequest):
     try:
         audio_file_path = f"{AUDIO_DIR}{uuid4().hex}_output.mp3"
-        text_to_speech(text, audio_file_path)
+        text_to_speech(request.text, audio_file_path)  # Convert text to speech
         return FileResponse(audio_file_path)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+# @app.post("/hear-medicines/")
+# async def hear_medicines(text: str = Form(...)):
+#     try:
+#         audio_file_path = f"{AUDIO_DIR}{uuid4().hex}_output.mp3"
+#         text_to_speech(text, audio_file_path)
+#         return FileResponse(audio_file_path)
+#     except Exception as e:
+#         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
 if __name__ == "__main__":
