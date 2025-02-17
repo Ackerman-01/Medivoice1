@@ -16,12 +16,12 @@ except Exception as e:
 ocr = PaddleOCR(
     use_angle_cls=True,
     lang='en',
-    rec_algorithm='CRNN',
-    rec_image_shape="3, 64, 640",
-    use_gpu=False,
-    det_db_box_thresh=0.1,  # More sensitive to faint t
-    det_db_thresh=0.20,  # Detects weak text regions
-    use_space_char=True  # Change to True if using GP
+    # drop_score=0.3,
+    # rec_algorithm='SVTR_LCNet',
+    # use_gpu=False, # Change to True if using GPu
+    # det_db_box_thresh=0.2,  # More sensitive to faint t
+    # det_db_thresh=0.05,  # Detects weak text regions
+    use_space_char=True
 )
 
 
@@ -58,7 +58,7 @@ def process_image_with_ocr(image_path):
             class_id = int(box.cls[0])
             class_name = r.names[class_id]
 
-            # ✅ Skip "pres" box and process only "medicine" boxes
+            # Skip "pres" box and process only "medicine" boxes
             if "medicine" not in class_name.lower():
                 print(f"⏭️ Skipping '{class_name}' box")
                 continue

@@ -7,3 +7,4 @@ paddlepaddle
 python-multipart
 spacy
 rapidfuzz
+ngrok
