@@ -12,19 +12,41 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
 
+# @app.post("/scan-prescription/")
+# async def scan_prescription(image: UploadFile):
+#     try:
+#         file_path = f"{UPLOAD_DIR}{uuid4().hex}_{image.filename}"
+#         with open(file_path, "wb") as buffer:
+#             buffer.write(await image.read())
+#         # Extract text using PaddleOCR
+#         extracted_text = process_image_with_ocr(file_path)
+#         if not extracted_text:
+#             return JSONResponse(content={"error": "No text detected."}, status_code=400)
+#         return {"extracted_text": extracted_text}
+#     except Exception as e:
+#         return JSONResponse(content={"error": str(e)}, status_code=500)
+
 @app.post("/scan-prescription/")
 async def scan_prescription(image: UploadFile):
     try:
         file_path = f"{UPLOAD_DIR}{uuid4().hex}_{image.filename}"
         with open(file_path, "wb") as buffer:
             buffer.write(await image.read())
-        # Extract text using PaddleOCR
-        extracted_text = process_image_with_ocr(file_path)
-        if not extracted_text:
-            return JSONResponse(content={"error": "No text detected."}, status_code=400)
-        return {"extracted_text": extracted_text}
+
+        # Extract corrected medicine names
+        matched_medicines = process_image_with_ocr(file_path)
+
+        # ✅ Remove None values before sending respons
+        matched_medicines = [med for med in matched_medicines if med]
+
+        if not matched_medicines:
+            return JSONResponse(content={"error": "No valid medicine names detected."}, status_code=400)
+
+        return {"medicines": matched_medicines}
+    
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
 
 
 @app.post("/hear-medicines/")
