@@ -8,9 +8,9 @@ from fuzzy_matching.match_utils import get_best_match
 # Load YOLO mo
 try:
     yolo_model = YOLO("./runs/detect/train2/weights/best2.pt")
-    print("✅ YOLO Model Loaded Successfully!")
+    print("YOLO Model Loaded Successfully!")
 except Exception as e:
-    print(f"❌ Error loading YOLO model: {e}")
+    print(f"Error loading YOLO model: {e}")
 
 # Initialize PaddleOCR
 ocr = PaddleOCR(
@@ -40,7 +40,7 @@ def process_image_with_ocr(image_path):
     # Load image
     image = cv2.imread(image_path)
     if image is None:
-        raise ValueError(f"❌ Error: Image not found at {image_path}")
+        raise ValueError(f"$$Error: Image not found at {image_path}")
 
     print(f"**Image loaded: {image_path} ({image.shape[1]}x{image.shape[0]})")
 
@@ -60,7 +60,7 @@ def process_image_with_ocr(image_path):
 
             # Skip "pres" box and process only "medicine" boxes
             if "medicine" not in class_name.lower():
-                print(f"⏭️ Skipping '{class_name}' box")
+                print(f"Skipping '{class_name}' box")
                 continue
 
             print(f"**Processing '{class_name}' box at ({x1}, {y1}, {x2}, {y2})")
@@ -74,7 +74,7 @@ def process_image_with_ocr(image_path):
             temp_path = "temp_medicine_crop.png"
             success = cv2.imwrite(temp_path, processed_image)
             if not success:
-                raise ValueError("❌ Failed to save cropped image")
+                raise ValueError("Failed to save cropped image")
 
             print(f"**Cropped medicine image saved: {temp_path}")
 

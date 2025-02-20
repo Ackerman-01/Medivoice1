@@ -37,7 +37,7 @@ async def scan_prescription(image: UploadFile):
         # Extract corrected medicine names
         matched_medicines = process_image_with_ocr(file_path)
 
-        # ✅ Remove None values before sending respons
+        # Remove None values before sending respons
         matched_medicines = [med for med in matched_medicines if med]
 
         if not matched_medicines:

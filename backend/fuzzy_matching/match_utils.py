@@ -50,13 +50,13 @@ def get_best_match(ocr_output, threshold=55):
     ocr_output_lower = ocr_output.lower().strip()
 
     if not ocr_output_lower:
-        print("⚠️ OCR output is empty, skipping fuzzy matching.")
+        print("OCR output is empty, skipping fuzzy matching.")
         return None
 
     best_match = process.extractOne(ocr_output_lower, medicine_dataset, scorer=fuzz.token_set_ratio)
 
     if best_match:
-        print(f"🔎 Fuzzy Match: {ocr_output} → {best_match[0]} (Score: {best_match[1]})")
+        print(f"Fuzzy Match: {ocr_output} > {best_match[0]} (Score: {best_match[1]})")
 
     return best_match[0] if best_match and best_match[1] >= threshold else None
  
