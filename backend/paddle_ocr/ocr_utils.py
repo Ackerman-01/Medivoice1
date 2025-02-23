@@ -16,11 +16,13 @@ except Exception as e:
 ocr = PaddleOCR(
     use_angle_cls=True,
     lang='en',
-    # drop_score=0.3,
-    # rec_algorithm='SVTR_LCNet',
-    # use_gpu=False, # Change to True if using GPu
-    # det_db_box_thresh=0.2,  # More sensitive to faint t
-    # det_db_thresh=0.05,  # Detects weak text regions
+    rec_model_dir="C:/Study/Techathon/paddleocr/PaddleOCR/output/v3_en_mobile/latest",
+    #drop_score=0.3,
+    rec_image_shape="3, 48, 160",
+    #rec_algorithm='SVTR_LCNet',
+    #use_gpu=False, # Change to True if using GPu
+    det_db_box_thresh=0.2,  # More sensitive to faint t
+    det_db_thresh=0.2,  # Detects weak text regions
     use_space_char=True
 )
 
